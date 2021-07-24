@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{136CC6D4-C141-41A9-9790-6BF3F28C6D7A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ErpDataFactory</RootNamespace>
+    <AssemblyName>ErpDataFactory</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>BA90C72202E11B8031C80BF397C4AF9F01967294</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ErpDataFactory_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Bogus, Version=33.0.2.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>packages\Bogus.33.0.2\lib\net40\Bogus.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.12.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>packages\RestSharp.106.12.0\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlSugar, Version=5.0.3.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SqlSugar.5.0.3.4\lib\SqlSugar.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Log\Logger.cs" />
+    <Compile Include="model\AttachedFil.cs" />
+    <Compile Include="model\Brand.cs" />
+    <Compile Include="model\BusinessChanceInfo.cs" />
+    <Compile Include="model\BusinessFollowRecord.cs" />
+    <Compile Include="model\CanvassAgreement.cs" />
+    <Compile Include="model\CatagoryParams.cs" />
+    <Compile Include="model\Contract.cs" />
+    <Compile Include="model\CrawlerRequest.cs" />
+    <Compile Include="model\Customer.cs" />
+    <Compile Include="model\CustomerBalanceLog.cs" />
+    <Compile Include="model\CustomerCategory.cs" />
+    <Compile Include="model\CustomerInvoiceInfo.cs" />
+    <Compile Include="model\CustomerLog.cs" />
+    <Compile Include="model\CustomerPreReceiveMoney.cs" />
+    <Compile Include="model\CustomerSetting.cs" />
+    <Compile Include="model\DefaultStore.cs" />
+    <Compile Include="model\DeliveryLine.cs" />
+    <Compile Include="model\DeliveryLineCustomer.cs" />
+    <Compile Include="model\DeliveryLineMember.cs" />
+    <Compile Include="model\DellOrderGoodsPo.cs" />
+    <Compile Include="model\Dept.cs" />
+    <Compile Include="model\DeptTemp.cs" />
+    <Compile Include="model\DistributionCustomerInvoice.cs" />
+    <Compile Include="model\DistributionCustomerInvoiceDetail.cs" />
+    <Compile Include="model\DistributionCustomerReceiveMoney.cs" />
+    <Compile Include="model\DistributionCustomerReceiveMoneyDetail.cs" />
+    <Compile Include="model\DistributionInvoice.cs" />
+    <Compile Include="model\DistributionInvoiceDetail.cs" />
+    <Compile Include="model\DistributionOperation.cs" />
+    <Compile Include="model\DistributionOrderState.cs" />
+    <Compile Include="model\DistributionPay.cs" />
+    <Compile Include="model\DistributionPayDetail.cs" />
+    <Compile Include="model\DistributionReceiveInvoice.cs" />
+    <Compile Include="model\DistributionReceiveInvoiceDetail.cs" />
+    <Compile Include="model\DistributionReceiveMoney.cs" />
+    <Compile Include="model\DistributionReceiveMoneyDetail.cs" />
+    <Compile Include="model\DOStatement.cs" />
+    <Compile Include="model\DOStatementDetail.cs" />
+    <Compile Include="model\DPStatement.cs" />
+    <Compile Include="model\DPStatementDetail.cs" />
+    <Compile Include="model\EmailInvoiceSetting.cs" />
+    <Compile Include="model\EmailSetting.cs" />
+    <Compile Include="model\Equipment.cs" />
+    <Compile Include="model\EquipmentLog.cs" />
+    <Compile Include="model\ErpDataBase.cs" />
+    <Compile Include="Date.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="model\FinanceAudit.cs" />
+    <Compile Include="model\FinanceRecord.cs" />
+    <Compile Include="model\FinanceSubject.cs" />
+    <Compile Include="model\Franchisee.cs" />
+    <Compile Include="model\Gift.cs" />
+    <Compile Include="model\Goods.cs" />
+    <Compile Include="model\GoodsCaptcha.cs" />
+    <Compile Include="model\GoodsCategory.cs" />
+    <Compile Include="model\GoodsComment.cs" />
+    <Compile Include="model\GoodsDefaultInfo.cs" />
+    <Compile Include="model\GoodsExtensions.cs" />
+    <Compile Include="model\GoodsGroupDetail.cs" />
+    <Compile Include="model\GoodsLog.cs" />
+    <Compile Include="model\GoodsModel.cs" />
+    <Compile Include="model\GoodsModelValue.cs" />
+    <Compile Include="model\GoodsPackage.cs" />
+    <Compile Include="model\GoodsPackageLog.cs" />
+    <Compile Include="model\GoodsParamValue.cs" />
+    <Compile Include="model\GoodsPhoto.cs" />
+    <Compile Include="model\GoodsPriceLog.cs" />
+    <Compile Include="model\GoodsType.cs" />
+    <Compile Include="model\GoodsTypeParam.cs" />
+    <Compile Include="model\GoodsTypeParamGroup.cs" />
+    <Compile Include="model\GoodsTypeParamOption.cs" />
+    <Compile Include="model\GoodsTypePrivateInfo.cs" />
+    <Compile Include="model\GoodsTypeUpdate.cs" />
+    <Compile Include="model\GroupOrderStatement.cs" />
+    <Compile Include="model\GroupOrderStatementDetail.cs" />
+    <Compile Include="model\GroupPay.cs" />
+    <Compile Include="model\IContract.cs" />
+    <Compile Include="model\IContractMY.cs" />
+    <Compile Include="model\IntroductionInvestment.cs" />
+    <Compile Include="model\Inventory.cs" />
+    <Compile Include="model\InventoryApply.cs" />
+    <Compile Include="model\InventoryLog.cs" />
+    <Compile Include="model\InventoryModifyAC.cs" />
+    <Compile Include="model\InventoryStock.cs" />
+    <Compile Include="model\Invoice.cs" />
+    <Compile Include="model\InvoiceLog.cs" />
+    <Compile Include="model\InvoiceRequire.cs" />
+    <Compile Include="model\InvoiceRequireDetail.cs" />
+    <Compile Include="model\IOrderContract.cs" />
+    <Compile Include="model\I_Analysis.cs" />
+    <Compile Include="model\I_BeiJingGoods.cs" />
+    <Compile Include="model\I_BeiJingGoodsMap.cs" />
+    <Compile Include="model\I_BeiJingProductParam.cs" />
+    <Compile Include="model\I_BeiJingZhengCaiCityList.cs" />
+    <Compile Include="model\I_Category.cs" />
+    <Compile Include="model\I_ChengduActivity.cs" />
+    <Compile Include="model\I_ChengDuActivityGoods.cs" />
+    <Compile Include="model\I_ChengDuCategoryExt.cs" />
+    <Compile Include="model\I_ChengDuCategoryParam.cs" />
+    <Compile Include="model\I_ChengDuParamValue.cs" />
+    <Compile Include="model\I_EfficientGoods.cs" />
+    <Compile Include="model\I_EGoods.cs" />
+    <Compile Include="model\I_ErrLog.cs" />
+    <Compile Include="model\I_Goods.cs" />
+    <Compile Include="model\I_GoodsExtention.cs" />
+    <Compile Include="model\I_GoodsLog.cs" />
+    <Compile Include="model\I_GoodsMap.cs" />
+    <Compile Include="model\I_GoodsOperateLog.cs" />
+    <Compile Include="model\I_GoodsPart.cs" />
+    <Compile Include="model\I_Message.cs" />
+    <Compile Include="model\I_OrderDetail.cs" />
+    <Compile Include="model\I_OrderExtension.cs" />
+    <Compile Include="model\I_Orders.cs" />
+    <Compile Include="model\I_Plat.cs" />
+    <Compile Include="model\I_Product.cs" />
+    <Compile Include="model\I_ProductsForZGLY.cs" />
+    <Compile Include="model\I_ProductsMapForZGLY.cs" />
+    <Compile Include="model\I_Project.cs" />
+    <Compile Include="model\I_ProjectExtention.cs" />
+    <Compile Include="model\I_Provider.cs" />
+    <Compile Include="model\KuaiPuOrder.cs" />
+    <Compile Include="model\KuaiPuOrderLog.cs" />
+    <Compile Include="model\LoginedIdentity.cs" />
+    <Compile Include="model\Logistics.cs" />
+    <Compile Include="model\LogisticsCompany.cs" />
+    <Compile Include="model\LogisticsDetail.cs" />
+    <Compile Include="model\LogisticsInfomation.cs" />
+    <Compile Include="model\LogisticsSubscribeLog.cs" />
+    <Compile Include="model\LogisticsSupported.cs" />
+    <Compile Include="model\MajorParamsDetail.cs" />
+    <Compile Include="model\MallFloatAd.cs" />
+    <Compile Include="model\MallSideBar.cs" />
+    <Compile Include="model\Member.cs" />
+    <Compile Include="model\MemberAddress.cs" />
+    <Compile Include="model\MemberAddressTemp.cs" />
+    <Compile Include="model\MemberApplyDept.cs" />
+    <Compile Include="model\MemberAuth.cs" />
+    <Compile Include="model\MemberCart.cs" />
+    <Compile Include="model\MemberFav.cs" />
+    <Compile Include="model\MemberInvoiceInfo.cs" />
+    <Compile Include="model\MemberLog.cs" />
+    <Compile Include="model\MemberOrderDept.cs" />
+    <Compile Include="model\MemberPoint.cs" />
+    <Compile Include="model\MemberRole.cs" />
+    <Compile Include="model\MemberTemp.cs" />
+    <Compile Include="model\ModifyAC.cs" />
+    <Compile Include="model\NeedToPurchase.cs" />
+    <Compile Include="model\NeedToPurchaseDetail.cs" />
+    <Compile Include="model\NeedToPurchaseOrder.cs" />
+    <Compile Include="model\News.cs" />
+    <Compile Include="model\NewsType.cs" />
+    <Compile Include="model\Notify_Msg.cs" />
+    <Compile Include="model\Notify_Setting.cs" />
+    <Compile Include="model\Notify_SmsSign.cs" />
+    <Compile Include="model\Notify_Templet.cs" />
+    <Compile Include="model\Open_Plat.cs" />
+    <Compile Include="model\Open_Project.cs" />
+    <Compile Include="model\Open_Setting.cs" />
+    <Compile Include="model\Open_SyncData.cs" />
+    <Compile Include="model\OrderAfterSale.cs" />
+    <Compile Include="model\OrderAfterSaleFlow.cs" />
+    <Compile Include="model\OrderAfterSalePhoto.cs" />
+    <Compile Include="model\OrderArchive.cs" />
+    <Compile Include="model\OrderBox.cs" />
+    <Compile Include="model\OrderCheckoutLog.cs" />
+    <Compile Include="model\OrderDelivery.cs" />
+    <Compile Include="model\OrderDeliveryBox.cs" />
+    <Compile Include="model\OrderDetail.cs" />
+    <Compile Include="model\OrderDistribution.cs" />
+    <Compile Include="model\OrderDistributionDetail.cs" />
+    <Compile Include="model\OrderGoodsComments.cs" />
+    <Compile Include="model\OrderInvoiceInfo.cs" />
+    <Compile Include="model\OrderLog.cs" />
+    <Compile Include="model\OrderModify.cs" />
+    <Compile Include="model\OrderModifyAC.cs" />
+    <Compile Include="model\OrderPicking.cs" />
+    <Compile Include="model\OrderPickingLog.cs" />
+    <Compile Include="model\OrderReceiveMoney.cs" />
+    <Compile Include="model\OrderReceiveMoneyDetail.cs" />
+    <Compile Include="model\Orders.cs" />
+    <Compile Include="model\OrderSourceExt.cs" />
+    <Compile Include="model\OrderStatement.cs" />
+    <Compile Include="model\OrderStatementCrossInvoice.cs" />
+    <Compile Include="model\OrderStatementDetail.cs" />
+    <Compile Include="model\OrderStatementLog.cs" />
+    <Compile Include="model\PageView.cs" />
+    <Compile Include="model\PageView_copy1.cs" />
+    <Compile Include="model\ParamGather.cs" />
+    <Compile Include="model\PayLog.cs" />
+    <Compile Include="model\PlatformInfo.cs" />
+    <Compile Include="model\PreGoodsPhoto.cs" />
+    <Compile Include="model\PreInvoice.cs" />
+    <Compile Include="model\PrintTempletDic.cs" />
+    <Compile Include="model\Product_GoodsType.cs" />
+    <Compile Include="model\Product_Info.cs" />
+    <Compile Include="model\ProGoodsType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="setting\setting.cs" />
+    <Compile Include="model\Purchase.cs" />
+    <Compile Include="model\PurchaseDetail.cs" />
+    <Compile Include="model\PurchaseLog.cs" />
+    <Compile Include="model\PurchaseMerge.cs" />
+    <Compile Include="model\PurchaseModify.cs" />
+    <Compile Include="model\PurchasePay.cs" />
+    <Compile Include="model\PurchasePayDetail.cs" />
+    <Compile Include="model\PurchasePayLog.cs" />
+    <Compile Include="model\PurchaseQuote.cs" />
+    <Compile Include="model\PurchaseQuoteDetail.cs" />
+    <Compile Include="model\PurchaseStatement.cs" />
+    <Compile Include="model\PurchaseStatementDetail.cs" />
+    <Compile Include="model\PurchaseStatementLog.cs" />
+    <Compile Include="model\Quotation.cs" />
+    <Compile Include="model\RegisterProtocol.cs" />
+    <Compile Include="model\SaleReportFakeData.cs" />
+    <Compile Include="model\SalesPlan.cs" />
+    <Compile Include="model\SalesStoreMap.cs" />
+    <Compile Include="model\ServiceOrder.cs" />
+    <Compile Include="model\ServiceOrderDelivery.cs" />
+    <Compile Include="model\ServiceOrderDeliveryDetail.cs" />
+    <Compile Include="model\ServiceOrderDetail.cs" />
+    <Compile Include="model\ServiceOrderItem.cs" />
+    <Compile Include="model\ServiceOrderLog.cs" />
+    <Compile Include="model\ServiceOrderStaff.cs" />
+    <Compile Include="model\SiChuanLog.cs" />
+    <Compile Include="model\SourceGoods.cs" />
+    <Compile Include="model\Store.cs" />
+    <Compile Include="model\StoreZone.cs" />
+    <Compile Include="model\StrategyItem.cs" />
+    <Compile Include="model\StrategyOrigin.cs" />
+    <Compile Include="model\StrategyRange.cs" />
+    <Compile Include="model\StrategyRule.cs" />
+    <Compile Include="model\Strategy_GrossProfit.cs" />
+    <Compile Include="model\Supplier.cs" />
+    <Compile Include="model\SupplierContacts.cs" />
+    <Compile Include="model\SupplierDepartment.cs" />
+    <Compile Include="model\SupplierInvoice.cs" />
+    <Compile Include="model\SupplierInvoiceContacts.cs" />
+    <Compile Include="model\SupplierInvoiceDetails.cs" />
+    <Compile Include="model\SupplierLog.cs" />
+    <Compile Include="model\SupplierPrepayment.cs" />
+    <Compile Include="model\SupplierSettleAccounts.cs" />
+    <Compile Include="model\SurveysFeedBack.cs" />
+    <Compile Include="model\sysdiagrams.cs" />
+    <Compile Include="model\SystemManager.cs" />
+    <Compile Include="model\Sys_Agent.cs" />
+    <Compile Include="model\Sys_Agent_Users.cs" />
+    <Compile Include="model\Sys_Approve.cs" />
+    <Compile Include="model\Sys_Authorize.cs" />
+    <Compile Include="model\Sys_Branch.cs" />
+    <Compile Include="model\Sys_BranchActivity.cs" />
+    <Compile Include="model\Sys_BranchActivityContent.cs" />
+    <Compile Include="model\Sys_BranchActivityGift.cs" />
+    <Compile Include="model\Sys_BranchActivityRange.cs" />
+    <Compile Include="model\Sys_BranchActivityRule.cs" />
+    <Compile Include="model\Sys_BranchAds.cs" />
+    <Compile Include="model\Sys_BranchArea.cs" />
+    <Compile Include="model\Sys_BranchAreaDetail.cs" />
+    <Compile Include="model\Sys_BranchAreas.cs" />
+    <Compile Include="model\Sys_BranchAuth.cs" />
+    <Compile Include="model\Sys_BranchBankInfo.cs" />
+    <Compile Include="model\Sys_BranchEmailSetting.cs" />
+    <Compile Include="model\Sys_BranchERPSetting.cs" />
+    <Compile Include="model\Sys_BranchFloor.cs" />
+    <Compile Include="model\Sys_BranchFloorBrandingWall.cs" />
+    <Compile Include="model\Sys_BranchFloorBrandingWallPhotos.cs" />
+    <Compile Include="model\Sys_BranchFloorDisplayType.cs" />
+    <Compile Include="model\Sys_BranchGoodsType.cs" />
+    <Compile Include="model\Sys_BranchHelp.cs" />
+    <Compile Include="model\Sys_BranchHelpContent.cs" />
+    <Compile Include="model\Sys_BranchHelpGroup.cs" />
+    <Compile Include="model\Sys_BranchHelpGroupPrivateInfo.cs" />
+    <Compile Include="model\Sys_BranchHelpPrivateInfo.cs" />
+    <Compile Include="model\Sys_BranchHotWords.cs" />
+    <Compile Include="model\Sys_BranchPay.cs" />
+    <Compile Include="model\Sys_BranchPayment.cs" />
+    <Compile Include="model\Sys_BranchSeo.cs" />
+    <Compile Include="model\Sys_BranchServicePromise.cs" />
+    <Compile Include="model\Sys_BranchServicePromiseDetail.cs" />
+    <Compile Include="model\Sys_BranchSetting.cs" />
+    <Compile Include="model\Sys_BranchSiteFooter.cs" />
+    <Compile Include="model\Sys_BranchSiteSetting.cs" />
+    <Compile Include="model\Sys_BranchSiteSolution.cs" />
+    <Compile Include="model\Sys_BranchTheme.cs" />
+    <Compile Include="model\Sys_BranchThemeArea.cs" />
+    <Compile Include="model\Sys_BranchThemeAreaGoodsTab.cs" />
+    <Compile Include="model\Sys_BranchThemeAreaPhoto.cs" />
+    <Compile Include="model\Sys_BranchThirdParty.cs" />
+    <Compile Include="model\Sys_BranchTopMenu.cs" />
+    <Compile Include="model\Sys_Branch_CSS.cs" />
+    <Compile Include="model\Sys_CanvassAgreement.cs" />
+    <Compile Include="model\Sys_Car.cs" />
+    <Compile Include="model\Sys_CarLog.cs" />
+    <Compile Include="model\Sys_CarUser.cs" />
+    <Compile Include="model\Sys_City.cs" />
+    <Compile Include="model\Sys_Config.cs" />
+    <Compile Include="model\Sys_Dept.cs" />
+    <Compile Include="model\Sys_Dictionary.cs" />
+    <Compile Include="model\Sys_DictionaryType.cs" />
+    <Compile Include="model\Sys_Distribution.cs" />
+    <Compile Include="model\Sys_DistributionGroup.cs" />
+    <Compile Include="model\Sys_ErrorLog.cs" />
+    <Compile Include="model\Sys_Group.cs" />
+    <Compile Include="model\Sys_GroupBranch.cs" />
+    <Compile Include="model\Sys_GroupLoginSetting.cs" />
+    <Compile Include="model\Sys_MapiServer.cs" />
+    <Compile Include="model\Sys_Permission.cs" />
+    <Compile Include="model\Sys_PermissionGroup.cs" />
+    <Compile Include="model\Sys_Price.cs" />
+    <Compile Include="model\Sys_PrintSetting.cs" />
+    <Compile Include="model\Sys_PrintTemplate.cs" />
+    <Compile Include="model\Sys_PrintValidate.cs" />
+    <Compile Include="model\Sys_Renew.cs" />
+    <Compile Include="model\Sys_Role.cs" />
+    <Compile Include="model\Sys_RolePermission.cs" />
+    <Compile Include="model\Sys_SiteCSS.cs" />
+    <Compile Include="model\Sys_Sms.cs" />
+    <Compile Include="model\Sys_UrlLog.cs" />
+    <Compile Include="model\Sys_UserLog.cs" />
+    <Compile Include="model\Sys_UserRole.cs" />
+    <Compile Include="model\Sys_Users.cs" />
+    <Compile Include="model\TaxCategory.cs" />
+    <Compile Include="model\TaxCategoryGoodsMap.cs" />
+    <Compile Include="model\ThirdCategory.cs" />
+    <Compile Include="model\ThirdPartyCategory.cs" />
+    <Compile Include="model\ThirdPartyGoodsCategoryMatch.cs" />
+    <Compile Include="model\ThirdPartyGoodsMatch.cs" />
+    <Compile Include="model\ThirdPartyLogin.cs" />
+    <Compile Include="model\ThirdPartyOrder.cs" />
+    <Compile Include="model\ThirdPartyOrderDetail.cs" />
+    <Compile Include="model\ThirdProduct.cs" />
+    <Compile Include="model\Transfer.cs" />
+    <Compile Include="model\TransferArchive.cs" />
+    <Compile Include="model\TransferBox.cs" />
+    <Compile Include="model\TransferDelivery.cs" />
+    <Compile Include="model\TransferDeliveryBox.cs" />
+    <Compile Include="model\TransferDetail.cs" />
+    <Compile Include="model\TransferLog.cs" />
+    <Compile Include="model\TransferPicking.cs" />
+    <Compile Include="model\TransferPickingLog.cs" />
+    <Compile Include="model\TransferReceiveMoney.cs" />
+    <Compile Include="model\TransferStatement.cs" />
+    <Compile Include="model\TransferStatementDetail.cs" />
+    <Compile Include="model\View_Customer.cs" />
+    <Compile Include="model\View_CustomerCounterDetail.cs" />
+    <Compile Include="model\View_CustomerLog.cs" />
+    <Compile Include="model\View_CustomerPreReceiveMoney.cs" />
+    <Compile Include="model\View_DeliverAchievement.cs" />
+    <Compile Include="model\View_DeliveryLineCustomer.cs" />
+    <Compile Include="model\View_DeliveryLineMember.cs" />
+    <Compile Include="model\View_DetailTransfer.cs" />
+    <Compile Include="model\View_DistributionCustomerInvoice.cs" />
+    <Compile Include="model\View_DistributionCustomerInvoiceDetail.cs" />
+    <Compile Include="model\View_DistributionCustomerReceiveMoney.cs" />
+    <Compile Include="model\View_DistributionCustomerReceiveMoneyDetail.cs" />
+    <Compile Include="model\View_DistributionInvoice.cs" />
+    <Compile Include="model\View_DistributionInvoiceDetail.cs" />
+    <Compile Include="model\View_DistributionPay.cs" />
+    <Compile Include="model\View_DistributionPayDetail.cs" />
+    <Compile Include="model\View_DistributionReceiveInvoice.cs" />
+    <Compile Include="model\View_DistributionReceiveInvoiceDetail.cs" />
+    <Compile Include="model\View_DistributionReceiveMoney.cs" />
+    <Compile Include="model\View_DistributionReceiveMoneyDetail.cs" />
+    <Compile Include="model\View_DOStatement.cs" />
+    <Compile Include="model\View_DPStatement.cs" />
+    <Compile Include="model\View_FinanceRecord.cs" />
+    <Compile Include="model\View_Goods.cs" />
+    <Compile Include="model\View_GoodsModelValue.cs" />
+    <Compile Include="model\View_GoodsPackage.cs" />
+    <Compile Include="model\View_GoodsParamValue.cs" />
+    <Compile Include="model\View_GoodsPhoto.cs" />
+    <Compile Include="model\View_GoodsTypeParam.cs" />
+    <Compile Include="model\View_Goods_DefaultInfo.cs" />
+    <Compile Include="model\View_GroupOrderStatement.cs" />
+    <Compile Include="model\View_GroupPay.cs" />
+    <Compile Include="model\View_IBeiJingGoodsMap.cs" />
+    <Compile Include="model\View_ICategory.cs" />
+    <Compile Include="model\View_IGoods.cs" />
+    <Compile Include="model\View_Inventory.cs" />
+    <Compile Include="model\View_InventoryApply.cs" />
+    <Compile Include="model\View_InventoryLog.cs" />
+    <Compile Include="model\View_InventoryModifyAC.cs" />
+    <Compile Include="model\View_Invoice.cs" />
+    <Compile Include="model\View_InvoiceAudit.cs" />
+    <Compile Include="model\View_InvoiceLog.cs" />
+    <Compile Include="model\View_InvoiceRequire.cs" />
+    <Compile Include="model\View_InvoiceRequireDetail.cs" />
+    <Compile Include="model\View_IOrderContract.cs" />
+    <Compile Include="model\View_IProjectPlat.cs" />
+    <Compile Include="model\View_LogisticsCompany.cs" />
+    <Compile Include="model\View_Member.cs" />
+    <Compile Include="model\View_MemberAddress.cs" />
+    <Compile Include="model\View_MemberCart.cs" />
+    <Compile Include="model\View_MemberDeliveryLine.cs" />
+    <Compile Include="model\View_Member_Orders.cs" />
+    <Compile Include="model\View_ModifyAC.cs" />
+    <Compile Include="model\View_NeedToPurchaseDetail.cs" />
+    <Compile Include="model\View_News.cs" />
+    <Compile Include="model\View_OrderAfterSale.cs" />
+    <Compile Include="model\View_OrderDeliveryBox.cs" />
+    <Compile Include="model\View_OrderDetail.cs" />
+    <Compile Include="model\View_OrderDetail_Goods.cs" />
+    <Compile Include="model\View_OrderDistribution.cs" />
+    <Compile Include="model\View_OrderDistributionDetail.cs" />
+    <Compile Include="model\View_OrderGoodsComments.cs" />
+    <Compile Include="model\View_OrderModify.cs" />
+    <Compile Include="model\View_OrderModifyAC.cs" />
+    <Compile Include="model\View_OrderPicking.cs" />
+    <Compile Include="model\View_OrderReceiveMoney.cs" />
+    <Compile Include="model\View_OrderReceiveMoneyDetail.cs" />
+    <Compile Include="model\View_Orders.cs" />
+    <Compile Include="model\View_OrderStatement.cs" />
+    <Compile Include="model\View_OrdersYangCaiLog.cs" />
+    <Compile Include="model\View_ORMAudit.cs" />
+    <Compile Include="model\View_PickOrderDetail.cs" />
+    <Compile Include="model\View_PickPurchaseDetail.cs" />
+    <Compile Include="model\View_Product_Info.cs" />
+    <Compile Include="model\View_Purchase.cs" />
+    <Compile Include="model\View_PurchaseDetail.cs" />
+    <Compile Include="model\View_PurchaseLog.cs" />
+    <Compile Include="model\View_PurchaseModify.cs" />
+    <Compile Include="model\View_PurchasePay.cs" />
+    <Compile Include="model\View_PurchasePayAudit.cs" />
+    <Compile Include="model\View_PurchasePayDetail.cs" />
+    <Compile Include="model\View_PurchaseQuoteDetail.cs" />
+    <Compile Include="model\View_PurchaseStatement.cs" />
+    <Compile Include="model\View_PurchaseStatementDetail.cs" />
+    <Compile Include="model\View_PurchaseStatementGoodsDetail.cs" />
+    <Compile Include="model\View_QuotationOrder.cs" />
+    <Compile Include="model\View_SourceGoods.cs" />
+    <Compile Include="model\View_SupplierDetail.cs" />
+    <Compile Include="model\View_SupplierInvoice.cs" />
+    <Compile Include="model\View_SupplierInvoiceDetails.cs" />
+    <Compile Include="model\View_SupplierOrder.cs" />
+    <Compile Include="model\View_SupplierPrepayment.cs" />
+    <Compile Include="model\View_SupplierReceiveInvoice.cs" />
+    <Compile Include="model\View_SupplierSettleAccounts.cs" />
+    <Compile Include="model\View_Sys_BranchGroup.cs" />
+    <Compile Include="model\View_Sys_Branch_CSS.cs" />
+    <Compile Include="model\View_Sys_Distribution.cs" />
+    <Compile Include="model\View_Sys_Permission.cs" />
+    <Compile Include="model\View_Sys_RolePermission.cs" />
+    <Compile Include="model\View_Sys_Users.cs" />
+    <Compile Include="model\View_TaxCategory.cs" />
+    <Compile Include="model\View_Transfer.cs" />
+    <Compile Include="model\View_TransferDeliveryBox.cs" />
+    <Compile Include="model\View_TransferDetail.cs" />
+    <Compile Include="model\View_TransferPicking.cs" />
+    <Compile Include="model\View_TransferReceiveMoney.cs" />
+    <Compile Include="model\View_TransferStatement.cs" />
+    <Compile Include="model\View_User_Permission.cs" />
+    <Compile Include="model\View_User_Role.cs" />
+    <Compile Include="model\View_VIPApply.cs" />
+    <Compile Include="model\View_VIPApplyDetail.cs" />
+    <Compile Include="model\View_VIPCounterCustomer.cs" />
+    <Compile Include="model\View_VIPCounterDetail.cs" />
+    <Compile Include="model\View_VirtualInventory.cs" />
+    <Compile Include="model\VIPApply.cs" />
+    <Compile Include="model\VIPApplyDetail.cs" />
+    <Compile Include="model\VIPApplyInvoiceInfo.cs" />
+    <Compile Include="model\VIPApplyLog.cs" />
+    <Compile Include="model\VIPApplyModify.cs" />
+    <Compile Include="model\VIPCounter.cs" />
+    <Compile Include="model\VIPCounterCustomer.cs" />
+    <Compile Include="model\VIPCounterDetail.cs" />
+    <Compile Include="model\VIPCounterLabel.cs" />
+    <Compile Include="model\VipCounterLabelGoods.cs" />
+    <Compile Include="model\VIPCounterLabelRelation.cs" />
+    <Compile Include="model\VirtualInventory.cs" />
+    <Compile Include="model\V_DeadLock_Process.cs" />
+    <Compile Include="model\YangCaiOrderLog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Log4.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <Content Include="setting.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="model\packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.2 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

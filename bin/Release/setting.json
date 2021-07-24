@@ -1,0 +1,17 @@
+{
+  "Flag": "1",
+  "BranchId": 1002,
+  "OperateMsgList": [
+    {
+      "StarTime": "2012-01-01",
+      "EndTime": "2013-01-01",
+      "DataCount": "10000",
+      "MaxDetailCount": "100",
+      "MaxGoodsNum": "100",
+      "MinSingleOrderAmount": "9000",
+      "MaxSingleOrderAmount": "10000",
+      "MinSingleOrderCount": "1",
+      "MaxSingleOrderCount": "3"
+    }
+  ]
+}
