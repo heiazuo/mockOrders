@@ -30,7 +30,7 @@ namespace ErpDataFactory
             }
 
             var dbContext = new ErpDataBase();
-            var goodsList = dbContext.Goods.Where(p => p.IsEnable && (p.BranchId == setting.BranchId || p.BranchId == 1)).OrderByDescending(e => e.SaleNumber).Take(3000).ToList();
+            var goodsList = dbContext.Goods.Where(p => p.Price > 0 && p.IsEnable && (p.BranchId == setting.BranchId || p.BranchId == 1)).OrderByDescending(e => e.SaleNumber).Take(3000).ToList();
             var userList = dbContext.View_Sys_Users.Where(p => p.BranchId == setting.BranchId).Where(p => p.DeptName.Contains("大客户销售事业部") || p.DeptName.Contains("总经办")).Select(p => p.Id).ToList();
             var salesList = dbContext.View_Sys_Users.Where(p => p.BranchId == setting.BranchId).Where(e => e.IsSales).Select(p => p.Id).ToList();
             var memberList = dbContext.View_Member.Where(p => p.CustomerId > 0 && p.DeptId > 0 && p.BranchId == setting.BranchId).ToList();
@@ -42,6 +42,10 @@ namespace ErpDataFactory
 
             if (setting.Flag == 1)
             {
+
+                var st = new Stopwatch();
+                st.Start();
+                var list = new List<Task>();
                 // 向Orders表中插入数据
                 for (var i = 0; i < OrdersFactoryTaskNum; i++)
                 {
@@ -49,12 +53,17 @@ namespace ErpDataFactory
                     var task = new Task(() =>
                     {
                         Console.WriteLine("线程ID:{0},开始执行", Thread.CurrentThread.ManagedThreadId);
-                        var dbContext1 = new ErpDataBase();
-                        DataFactory(dbContext1, setting.OperateMsgList, setting.BranchId, goodsList, userList, salesList, customerList, deptList, memberList);
+
+                        DataFactory(setting.OperateMsgList, setting.BranchId, goodsList, userList, salesList, customerList, deptList, memberList);
+
                     });
                     task.Start();
+                    list.Add(task);
                 }
 
+                Task.WaitAll(list.ToArray());
+                st.Stop();
+                Console.WriteLine($"执行成功{setting.OperateMsgList.Sum(e => e.DataCount)}条,总耗时{st.ElapsedMilliseconds}ms");
                 Console.ReadKey();
             }
             else if (setting.Flag == 2)
@@ -66,10 +75,10 @@ namespace ErpDataFactory
                     {
                         Console.WriteLine(DateTime.Now + "线程ID:{0},开始执行", Thread.CurrentThread.ManagedThreadId);
                         var stw = new Stopwatch();
-                        var _dbContext = new ErpDataBase();
-                        stw.Start();
-                        FactoryToSaleReport(_dbContext, setting);
-                        stw.Stop();
+                        using (var _dbContext = new ErpDataBase())
+                        {
+                            FactoryToSaleReport(_dbContext, setting);
+                        }
                     });
                     task.Start();
                 }
@@ -120,11 +129,11 @@ namespace ErpDataFactory
         /// <summary>
         ///     数据工厂
         /// </summary>
-        private static void DataFactory(ErpDataBase dbContext, List<OperateMsg> opts, int branchId, List<Goods> goodsList, List<int> userList, List<int> salesList,
+        private static void DataFactory(List<OperateMsg> opts, int branchId, List<Goods> goodsList, List<int> userList, List<int> salesList,
             IReadOnlyCollection<Customer> customerList, IReadOnlyCollection<Dept> deptList, IReadOnlyCollection<View_Member> memberList)
         {
             foreach (var itemOperate in opts)
-                CreateData(dbContext, itemOperate, branchId, goodsList, userList, salesList, customerList, deptList, memberList);
+                CreateData(itemOperate, branchId, goodsList, userList, salesList, customerList, deptList, memberList);
 
             #region console
 
@@ -137,7 +146,6 @@ namespace ErpDataFactory
         /// <summary>
         ///     生产线
         /// </summary>
-        /// <param name="dbContext"></param>
         /// <param name="setting"></param>
         /// <param name="branchId"></param>
         /// <param name="goodsList"></param>
@@ -146,7 +154,7 @@ namespace ErpDataFactory
         /// <param name="customerList"></param>
         /// <param name="deptList"></param>
         /// <param name="memberList"></param>
-        private static void CreateData(ErpDataBase dbContext, OperateMsg setting, int branchId, List<Goods> goodsList, List<int> userList, List<int> salesList,
+        private static void CreateData(OperateMsg setting, int branchId, List<Goods> goodsList, List<int> userList, List<int> salesList,
             IReadOnlyCollection<Customer> customerList, IReadOnlyCollection<Dept> deptList, IReadOnlyCollection<View_Member> memberList)
         {
             #region console
@@ -156,9 +164,9 @@ namespace ErpDataFactory
 
             #endregion
 
+            var dbContext = new ErpDataBase();
             try
             {
-                var goodsIds = goodsList.Select(e => e.Id).ToList();
                 var customerIds = customerList.Select(e => e.Id).ToList();
 
                 //  生成订单数 setting.DataCount
@@ -178,10 +186,10 @@ namespace ErpDataFactory
 
                     //  生成订单
                     var orderId = CreateOrder(dbContext, branchId, customer, dept, member, dateTime, saleId, currentUserId);
+
                     if (orderId > 0)
                     {
-                        var randomGoodIds = GetRandomGoods(goodsIds, setting.MaxDetailCount);
-                        goodsList = goodsList.Where(p => randomGoodIds.Contains(p.Id)).ToList();
+
                         // 生成订单明细
                         CreateOrderDetail(dbContext, orderId, goodsList, setting.MaxGoodsNum);
                         // 计算毛利
@@ -192,6 +200,10 @@ namespace ErpDataFactory
             catch (Exception ex)
             {
                 Logger.Error(nameof(CreateData), ex);
+            }
+            finally
+            {
+                dbContext.Dispose();
             }
 
             Console.WriteLine("CreateData ---end---" + "\n");
@@ -213,8 +225,6 @@ namespace ErpDataFactory
         {
             try
             {
-                Logger.Info("新增订单", $"{branchId}-{customer.Id}");
-
                 var order = new Orders
                 {
                     BranchId = branchId,
@@ -311,61 +321,77 @@ namespace ErpDataFactory
         /// <param name="goodsList"></param>
         /// <param name="maxGoodsNum"></param>
         /// <returns></returns>
-        private static bool CreateOrderDetail(ErpDataBase dbContext, int orderId, IEnumerable<Goods> goodsList, int maxGoodsNum)
+        private static bool CreateOrderDetail(ErpDataBase dbContext, int orderId, IList<Goods> goodsList, int maxGoodsNum)
         {
             var orderDetails = new List<OrderDetail>();
             const int maxAmount = 6600;
-            var amountNum = (decimal) 0;
+            var amountNum = (decimal)0;
+            var goodsIds = goodsList.Select(e => e.Id).ToList();
+            var index = 0;
+            var randomGoodIds = GetRandomGoods(goodsIds, 10);
+            goodsList = goodsList.Where(p => randomGoodIds.Contains(p.Id)).ToList();
             foreach (var goods in goodsList)
             {
-                var num = GetRandomNum(1, maxGoodsNum);
+                index++;
+                var offset = maxAmount - amountNum;
+                offset = offset > 0 ? offset : 1;
+                var max = offset / goods.Price;
+                max = max <= 1 ? 1 : max;
+                var num = GetRandomNum(1, (int)max);
                 var amount = CalculateOrderAmount(goods.Price, num);
                 var noTaxAmount = CalcNoTaxAmountRoundFour(amount, (decimal)0.13);
                 var taxRate = (decimal)0.130;
                 var taxAmount = CalcTaxAmountRoundFour(amount, noTaxAmount);
 
-                amount = amount == 0 ? maxAmount : amount;
-                amount = amount >= (maxAmount - amountNum) ? (maxAmount - amountNum + 1) : amount;
-                if (amountNum > maxAmount)
+                if (index > 1)
+                {
+                    if (amount + amountNum > maxAmount + 1000)
+                    {
+                        break;
+                    }
+                }
+                //amount = amount == 0 ? maxAmount : amount;
+                //amount = amount >= (maxAmount - amountNum) ? (maxAmount - amountNum + 1) : amount;
+                if (amountNum >= maxAmount)
                 {
                     break;
                 }
-                else
+
+                orderDetails.Add(new OrderDetail
                 {
-                    orderDetails.Add(new OrderDetail
-                    {
-                        OrderId = orderId,
-                        GoodsId = goods.Id,
-                        Num = num,
-                        Price = goods.Price,
-                        AC = goods.InPrice,
-                        Amount = amount,
-                        Point = 0,
-                        PickNum = 0,
-                        IsGift = false,
-                        IsTotalPriceModel = false,
-                        IsCustomGoods = false,
-                        AntiCounterfeiting = false,
-                        DisplayNum = num,
-                        DisplayUnit = goods.Unit != "" ? goods.Unit : "个",
-                        DisplayPrice = goods.Price,
-                        IsComment = false,
-                        OldOrderId = 0,
-                        RefundNum = 0,
-                        GrossProfit = UpdateGrossProfit(amount, taxAmount, goods.InPrice, num),
-                        TaxRate = taxRate,
-                        TaxAmount = taxAmount,
-                        NoTaxAmount = noTaxAmount,
-                        NoTaxPrice = CalcNoTaxAmountRoundFour(goods.Price, taxRate),
-                        DisplayNoTaxPrice = CalcNoTaxAmountRoundFour(goods.Price, taxRate),
-                        AFC = goods.InPrice,
-                        Discount = 1,
-                        DisplayAmount = amount,
-                        GrossProfitPercent = UpdateGrossProfitPercent(amount, taxAmount, goods.InPrice, num)
-                    });
-                }
+                    OrderId = orderId,
+                    GoodsId = goods.Id,
+                    Num = num,
+                    Price = goods.Price,
+                    AC = goods.InPrice,
+                    Amount = amount,
+                    Point = 0,
+                    PickNum = 0,
+                    IsGift = false,
+                    IsTotalPriceModel = false,
+                    IsCustomGoods = false,
+                    AntiCounterfeiting = false,
+                    DisplayNum = num,
+                    DisplayUnit = goods.Unit != "" ? goods.Unit : "个",
+                    DisplayPrice = goods.Price,
+                    IsComment = false,
+                    OldOrderId = 0,
+                    RefundNum = 0,
+                    GrossProfit = UpdateGrossProfit(amount, taxAmount, goods.InPrice, num),
+                    TaxRate = taxRate,
+                    TaxAmount = taxAmount,
+                    NoTaxAmount = noTaxAmount,
+                    NoTaxPrice = CalcNoTaxAmountRoundFour(goods.Price, taxRate),
+                    DisplayNoTaxPrice = CalcNoTaxAmountRoundFour(goods.Price, taxRate),
+                    AFC = goods.InPrice,
+                    Discount = 1,
+                    DisplayAmount = amount,
+                    GrossProfitPercent = UpdateGrossProfitPercent(amount, taxAmount, goods.InPrice, num)
+                });
                 amountNum += amount;
             }
+
+            Logger.Debug("新增订单", $"{orderId}-{orderDetails.Count}");
 
             dbContext.OrderDetail.AddRange(orderDetails);
             dbContext.SaveChanges();
@@ -408,10 +434,6 @@ namespace ErpDataFactory
         /// <summary>
         ///     更新单品毛利率
         /// </summary>
-        /// <param name="amount"></param>
-        /// <param name="taxAmount"></param>
-        /// <param name="ac"></param>
-        /// <param name="num"></param>
         /// <returns></returns>
         private static string UpdateGrossProfitPercent(decimal amount, decimal taxAmount, decimal ac, int num)
         {
