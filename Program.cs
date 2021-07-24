@@ -377,7 +377,10 @@ namespace ErpDataFactory
         /// <summary>
         ///     更新单品毛利率
         /// </summary>
-        /// <param name="detail"></param>
+        /// <param name="amount"></param>
+        /// <param name="taxAmount"></param>
+        /// <param name="ac"></param>
+        /// <param name="num"></param>
         /// <returns></returns>
         private static decimal UpdateGrossProfit(decimal amount, decimal taxAmount, decimal ac, int num)
         {
@@ -405,7 +408,10 @@ namespace ErpDataFactory
         /// <summary>
         ///     更新单品毛利率
         /// </summary>
-        /// <param name="detail"></param>
+        /// <param name="amount"></param>
+        /// <param name="taxAmount"></param>
+        /// <param name="ac"></param>
+        /// <param name="num"></param>
         /// <returns></returns>
         private static string UpdateGrossProfitPercent(decimal amount, decimal taxAmount, decimal ac, int num)
         {
