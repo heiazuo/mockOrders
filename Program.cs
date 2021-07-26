@@ -12,12 +12,21 @@ using Newtonsoft.Json;
 
 namespace ErpDataFactory
 {
-    internal class Program
+
+    public class Statistics
+    {
+        public int orderCount = 0;
+        public decimal orderAmount = 0;
+
+
+    }
+    public class Program
     {
         private static readonly string PathUrl = Environment.CurrentDirectory + "\\setting.json";
 
         private static readonly int OrdersFactoryTaskNum = 100; //线程任务数  
         private static readonly int SaleFactoryTaskNum = 10; //线程任务数
+        private static Statistics statistics = new Statistics();
 
         private static void Main(string[] args)
         {
@@ -42,9 +51,20 @@ namespace ErpDataFactory
 
             if (setting.Flag == 1)
             {
-
+                var end = false;
                 var st = new Stopwatch();
                 st.Start();
+                Task.Factory.StartNew(() =>
+                {
+                    while (!end)
+                    {
+                        Thread.Sleep(1000);
+                        var avg = (int)(statistics.orderCount * 1000 / st.ElapsedMilliseconds);
+                        var need = (int)((setting.OperateMsgList.Sum(e => e.DataCount) - statistics.orderCount) / avg);
+                        Console.WriteLine($"已完成{statistics.orderCount}个订单,耗时{st.ElapsedMilliseconds}ms,平均{avg}个/s,剩余{need}s");
+                    }
+                });
+
                 var list = new List<Task>();
                 // 向Orders表中插入数据
                 for (var i = 0; i < OrdersFactoryTaskNum; i++)
@@ -52,7 +72,7 @@ namespace ErpDataFactory
 
                     var task = new Task(() =>
                     {
-                        Console.WriteLine("线程ID:{0},开始执行", Thread.CurrentThread.ManagedThreadId);
+                        //Console.WriteLine("线程ID:{0},开始执行", Thread.CurrentThread.ManagedThreadId);
 
                         DataFactory(setting.OperateMsgList, setting.BranchId, goodsList, userList, salesList, customerList, deptList, memberList);
 
@@ -62,7 +82,9 @@ namespace ErpDataFactory
                 }
 
                 Task.WaitAll(list.ToArray());
+                end = true;
                 st.Stop();
+
                 Console.WriteLine($"执行成功{setting.OperateMsgList.Sum(e => e.DataCount)}条,总耗时{st.ElapsedMilliseconds}ms");
                 Console.ReadKey();
             }
@@ -73,7 +95,7 @@ namespace ErpDataFactory
                 {
                     var task = new Task(() =>
                     {
-                        Console.WriteLine(DateTime.Now + "线程ID:{0},开始执行", Thread.CurrentThread.ManagedThreadId);
+                        //Console.WriteLine(DateTime.Now + "线程ID:{0},开始执行", Thread.CurrentThread.ManagedThreadId);
                         var stw = new Stopwatch();
                         using (var _dbContext = new ErpDataBase())
                         {
@@ -137,7 +159,7 @@ namespace ErpDataFactory
 
             #region console
 
-            Console.WriteLine("————————" + DateTime.Now + ":执行结束!" + "————————");
+            //Console.WriteLine("————————" + DateTime.Now + ":执行结束!" + "————————");
             //Console.ReadKey();
 
             #endregion
@@ -159,7 +181,7 @@ namespace ErpDataFactory
         {
             #region console
 
-            Console.WriteLine("CreateData ---start---");
+            //Console.WriteLine("CreateData ---start---");
             //Console.WriteLine("\tBranchId:" + branchId + "\n\tOperate:" + JsonConvert.SerializeObject(setting));
 
             #endregion
@@ -206,7 +228,7 @@ namespace ErpDataFactory
                 dbContext.Dispose();
             }
 
-            Console.WriteLine("CreateData ---end---" + "\n");
+            //Console.WriteLine("CreateData ---end---" + "\n");
         }
 
         /// <summary>
@@ -303,7 +325,7 @@ namespace ErpDataFactory
 
                 dbContext.Orders.Add(order);
                 dbContext.SaveChanges();
-
+                Interlocked.Increment(ref statistics.orderCount);
                 return order.Id > 0 ? order.Id : 0;
             }
             catch (Exception ex)
@@ -324,7 +346,7 @@ namespace ErpDataFactory
         private static bool CreateOrderDetail(ErpDataBase dbContext, int orderId, IList<Goods> goodsList, int maxGoodsNum)
         {
             var orderDetails = new List<OrderDetail>();
-            const int maxAmount = 6600;
+            var maxAmount = maxGoodsNum;
             var amountNum = (decimal)0;
             var goodsIds = goodsList.Select(e => e.Id).ToList();
             var index = 0;
@@ -352,7 +374,7 @@ namespace ErpDataFactory
                 }
                 //amount = amount == 0 ? maxAmount : amount;
                 //amount = amount >= (maxAmount - amountNum) ? (maxAmount - amountNum + 1) : amount;
-                if (amountNum >= maxAmount)
+                if (amountNum >= maxAmount - 300)
                 {
                     break;
                 }
@@ -390,8 +412,6 @@ namespace ErpDataFactory
                 });
                 amountNum += amount;
             }
-
-            Logger.Debug("新增订单", $"{orderId}-{orderDetails.Count}");
 
             dbContext.OrderDetail.AddRange(orderDetails);
             dbContext.SaveChanges();
